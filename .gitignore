@@ -1,0 +1,40 @@
+@"
+# Ignore Visual Studio temporary files, build results, and
+# user-specific files
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+.vscode/
+.vs/
+*.user
+*.suo
+*.pdb
+*.cache
+*.log
+*.csproj.user
+*.csproj.nuget.dgspec.json
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+
+# Ignore package and build directories
+bin/
+obj/
+packages/
+
+# Ignore ReSharper files
+*.DotSettings.user
+
+# Ignore Rider files
+.idea/
+
+# Ignore configuration files
+appsettings.json
+
+# Ignore auto-generated files
+*.generated.cs
+
+# Ignore environment files
+.env
+.env.*
+"@ | Out-File -FilePath .gitignore -Encoding utf8
