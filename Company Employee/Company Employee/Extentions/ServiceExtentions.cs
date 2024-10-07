@@ -42,6 +42,10 @@ namespace Company_Employee.Extentions
             services.AddDbContext<RepositoryContext>(opts =>
                     opts.UseMySql(configuration.GetConnectionString("mysqlConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
 
+        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) => 
+            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+
+
     }
 
 }
