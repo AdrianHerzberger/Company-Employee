@@ -33,19 +33,14 @@ namespace CompanyEmployees.Presentation.Controllers
         [HttpPost]
         public IActionResult CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
         {
-            if (employee == null)
+            if (employee is null)
             {
-                return BadRequest("CreateEmployeeForCompany object is null.");
+                return BadRequest("EmployeeForCreationDto object is null");
             }
 
             var employeeToReturn = _service.EmployeeService.CreateEmployeeForCompany(companyId, employee, trackChanges: false);
 
-            return CreatedAtRoute("GetEmployeeForCompany", new
-            {
-                companyId,
-                id = employeeToReturn.Id
-            }, employeeToReturn);
-
+            return CreatedAtRoute("GetEmployeeForCompany", new { companyId, id = employeeToReturn.Id }, employeeToReturn);
         }
     }
 }
