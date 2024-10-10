@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DataTransferObjects
 {
-    public record CompanyForUpdateDto : CompanyForManipulationDto
+    public abstract record CompanyForManipulationDto
     {
         [Required(ErrorMessage = "Company name is required field.")]
         [MaxLength(100, ErrorMessage = "Maximum length for the Address is 100 characters.")]

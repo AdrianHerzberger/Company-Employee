@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Shared.DataTransferObjects;
@@ -39,6 +40,11 @@ namespace CompanyEmployees.Presentation.Controllers
                 return BadRequest("EmployeeForCreationDto object is null");
             }
 
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+
             var employeeToReturn = _service.EmployeeService.CreateEmployeeForCompany(companyId, employee, trackChanges: false);
 
             return CreatedAtRoute("GetEmployeeForCompany", new { companyId, id = employeeToReturn.Id }, employeeToReturn);
@@ -58,6 +64,11 @@ namespace CompanyEmployees.Presentation.Controllers
             if (employee is null)
             {
                 return BadRequest("EmployeeForUpdateDto object is null");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
             }
 
             _service.EmployeeService.UpdateEmployeeForCompany(companyId, id, employee,
