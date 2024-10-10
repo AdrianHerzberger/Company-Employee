@@ -14,7 +14,7 @@ namespace Shared.DataTransferObjects
         [MaxLength(100, ErrorMessage = "Maximum length for the Address is 100 characters.")]
         public string? Name { get; init; }
 
-        [Required(ErrorMessage = "Address is a required field.")]
+        [Required(ErrorMessage = "Company Address is a required field.")]
         public string? Address { get; init; }
 
         [Required(ErrorMessage = "Country is a required field.")]
