@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,11 @@ namespace CompanyEmployees.Presentation.Controllers
         public EmployeesController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployeesFromCompany(Guid companyId)
+        public async Task<IActionResult> GetEmployeesFromCompany(Guid companyId,
+                [FromQuery] EmployeeParameters employeeParameters)
         {
-            var employee = await _service.EmployeeService.GetEmployeesAsync(companyId, trackChanges:false);
+            var employee = await _service.EmployeeService
+                .GetEmployeesAsync(companyId, employeeParameters, trackChanges: false);
             return Ok (employee);
         }
 
@@ -82,7 +85,6 @@ namespace CompanyEmployees.Presentation.Controllers
 
             return NoContent();
         }
-
 
     }
 }
