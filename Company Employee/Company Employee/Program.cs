@@ -14,8 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
-
-
 // Add services to the container.
 
 builder.Services.ConfigureCors();
@@ -35,6 +33,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
 
+
 builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;
@@ -43,6 +42,7 @@ builder.Services.AddControllers(config =>
 }).AddXmlDataContractSerializerFormatters()
  .AddCustomCsvFormatter()
  .AddNewtonsoftJson();
+builder.Services.AddCustomMediaTypes();
 builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
 var app = builder.Build();

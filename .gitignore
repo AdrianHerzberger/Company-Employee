@@ -25,11 +25,12 @@ packages/
 # Ignore ReSharper files
 *.DotSettings.user
 
-# Ignore Rider files
+# Ignore VS files
 .idea/
 
 # Ignore configuration files
 appsettings.json
+nlog.config
 
 # Ignore auto-generated files
 *.generated.cs
