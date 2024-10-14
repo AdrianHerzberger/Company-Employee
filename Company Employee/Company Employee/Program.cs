@@ -32,7 +32,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
-
+builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 
 builder.Services.AddControllers(config =>
 {
