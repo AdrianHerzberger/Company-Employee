@@ -4,6 +4,7 @@ using Shared.RequestFeatures;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Services.Contracts
 {
     public interface IEmployeeService
     {
-        Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid
+        Task<(IEnumerable<ExpandoObject> employees, MetaData metaData)> GetEmployeesAsync(Guid
              companyId, EmployeeParameters employeeParameters, bool trackChanges);
         Task<EmployeeDto> GetEmployeeAsync(Guid employeeId, Guid id, bool trackChanges);
         Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId, EmployeeForCreationDto employeeForCreationDto, bool trackChanges);
