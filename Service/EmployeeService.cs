@@ -51,7 +51,7 @@ namespace Service
             _dataShaper = dataShaper;
         }
 
-        public async Task<(IEnumerable<ExpandoObject> employees, MetaData metaData)>
+        public async Task<(IEnumerable<ShapedEntity> employees, MetaData metaData)>
               GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
 
         {
