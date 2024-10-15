@@ -1,6 +1,7 @@
 using Company_Employee;
 using Company_Employee.Extentions;
 using CompanyEmployees.Presentation.ActionFilters;
+using CompanyEmployees.Utility;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,9 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
-builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+builder.Services.AddScoped<IEmployeeLinks, EmployeeLinks>();
 
 builder.Services.AddControllers(config =>
 {
@@ -40,10 +42,10 @@ builder.Services.AddControllers(config =>
     config.ReturnHttpNotAcceptable = true;
     config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
 }).AddXmlDataContractSerializerFormatters()
- .AddCustomCsvFormatter()
- .AddNewtonsoftJson();
+  .AddCustomCsvFormatter()
+  .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+
 builder.Services.AddCustomMediaTypes();
-builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
 var app = builder.Build();
 
@@ -51,10 +53,8 @@ var app = builder.Build();
 //app.ConfigureExceptionHandler(logger);
 app.UseExceptionHandler(opt => { });
 
-
 if (app.Environment.IsProduction())
     app.UseHsts();
-
 
 // Configure the HTTP request pipeline.
 

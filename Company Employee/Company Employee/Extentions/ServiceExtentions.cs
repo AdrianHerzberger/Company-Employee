@@ -53,14 +53,13 @@ namespace Company_Employee.Extentions
             services.Configure<MvcOptions>(config =>
             {
                 var systemTextJsonOutputFormatter = config.OutputFormatters
-                        .OfType<SystemTextJsonInputFormatter>()?
+                        .OfType<SystemTextJsonOutputFormatter>()?
                         .FirstOrDefault();
 
-
-                if (systemTextJsonOutputFormatter != null);
+                if (systemTextJsonOutputFormatter != null)
                 {
                     systemTextJsonOutputFormatter.SupportedMediaTypes
-                        .Add("application/vnd.codemaze.hateoas+json");
+                    .Add("application/vnd.codemaze.hateoas+json");
                 }
 
                 var xmlOutputFormatter = config.OutputFormatters
@@ -70,11 +69,10 @@ namespace Company_Employee.Extentions
                 if (xmlOutputFormatter != null)
                 {
                     xmlOutputFormatter.SupportedMediaTypes
-                        .Add("application/vnd.codemaze.hateoas+json");
+                    .Add("application/vnd.codemaze.hateoas+xml");
                 }
             });
         }
-
 
     }
 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +26,7 @@ namespace CompanyEmployees.Presentation.ActionFilters
 
             if (!MediaTypeHeaderValue.TryParse(mediaType, out MediaTypeHeaderValue? outMediaType))
             {
-                context.Result = new BadRequestObjectResult($"Media type not \r\npresent. Please add Accept header with the required media type.");
+                context.Result = new BadRequestObjectResult($"Media type not present. Please add Accept header with the required media type.");
                 return;
             }
 
