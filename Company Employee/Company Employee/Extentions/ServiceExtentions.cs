@@ -59,7 +59,9 @@ namespace Company_Employee.Extentions
                 if (systemTextJsonOutputFormatter != null)
                 {
                     systemTextJsonOutputFormatter.SupportedMediaTypes
-                    .Add("application/vnd.codemaze.hateoas+json");
+                        .Add("application/vnd.codemaze.hateoas+json");
+                    systemTextJsonOutputFormatter.SupportedMediaTypes
+                        .Add("application/vnd.codemaze.apiroot+json");
                 }
 
                 var xmlOutputFormatter = config.OutputFormatters
@@ -69,7 +71,9 @@ namespace Company_Employee.Extentions
                 if (xmlOutputFormatter != null)
                 {
                     xmlOutputFormatter.SupportedMediaTypes
-                    .Add("application/vnd.codemaze.hateoas+xml");
+                        .Add("application/vnd.codemaze.hateoas+xml");
+                    xmlOutputFormatter.SupportedMediaTypes
+                        .Add("application/vnd.codemaze.hateoas+xml");
                 }
             });
         }
