@@ -33,7 +33,7 @@ appsettings.json
 nlog.config
 
 # Ignore internal log files
-internal_logs/internallog.txt
+internal_logs
 
 # Ignore auto-generated files
 *.generated.cs
