@@ -32,6 +32,9 @@ packages/
 appsettings.json
 nlog.config
 
+# Ignore internal log files
+internal_logs/internallog.txt
+
 # Ignore auto-generated files
 *.generated.cs
 
