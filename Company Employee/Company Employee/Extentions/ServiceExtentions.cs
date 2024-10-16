@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
 using Services.Contracts;
+using System.Collections.Concurrent;
+using System.Threading.RateLimiting;
 
 namespace Company_Employee.Extentions
 {
@@ -21,7 +23,7 @@ namespace Company_Employee.Extentions
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .WithExposedHeaders("X-Pagination")
-                );    
+                );
             });
 
 
@@ -35,7 +37,7 @@ namespace Company_Employee.Extentions
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
 
-        public static void ConfigureRepositoryManager(this IServiceCollection services) => 
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
         public static void ConfigureServiceManager(this IServiceCollection services) =>
@@ -46,7 +48,7 @@ namespace Company_Employee.Extentions
             services.AddDbContext<RepositoryContext>(opts =>
                     opts.UseMySql(configuration.GetConnectionString("mysqlConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
 
-        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) => 
+        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) =>
             builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
 
 
@@ -106,6 +108,52 @@ namespace Company_Employee.Extentions
                 opt.AddPolicy("120SecondsDuration", p => p.Expire(TimeSpan.FromSeconds(120)));
             });
 
-    }
+        public static void ConfigureRatingLimitOptions(this IServiceCollection services)
+        {
+            services.AddRateLimiter(opt =>
+            {
+                opt.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
 
+                    RateLimitPartition.GetFixedWindowLimiter("GlobalLimiter",
+                        partition => new FixedWindowRateLimiterOptions
+                        {
+                            AutoReplenishment = true,
+                            PermitLimit = 5,
+                            QueueLimit = 2,
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            Window = TimeSpan.FromMinutes(1),
+                        }));
+
+                opt.RejectionStatusCode = 429;
+
+                opt.AddPolicy("SpecificPolicy", context =>
+                    RateLimitPartition.GetFixedWindowLimiter("SpecificLimiter",
+                        partition => new FixedWindowRateLimiterOptions
+                        {
+                             AutoReplenishment = true,
+                             PermitLimit = 3,
+                             Window = TimeSpan.FromSeconds(10)
+                        }));
+
+                opt.OnRejected = async (context, token) =>
+                {
+                    context.HttpContext.Response.StatusCode = 429;
+
+                    if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                    {
+                        await context.HttpContext.Response
+                               .WriteAsync($"Too many requests. Please try agian after " +
+                                    $"{retryAfter.TotalSeconds} second(s).", token);
+
+                    }
+                    else
+                    {
+                        await context.HttpContext.Response
+                            .WriteAsync("Too many request. Please try agian later.", token);
+                    }
+                };
+            });
+
+        }
+    }
 }
