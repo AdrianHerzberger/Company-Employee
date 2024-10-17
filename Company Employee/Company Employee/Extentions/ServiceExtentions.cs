@@ -212,5 +212,9 @@ namespace Company_Employee.Extentions
                 };
             });
         }
+
+        public static void AddJwtConfiguartion(this IServiceCollection services,
+            IConfiguration configuration) =>
+            services.Configure<JwtConfiguration>(configuration.GetSection("JwtSettings"));
     }
 }
